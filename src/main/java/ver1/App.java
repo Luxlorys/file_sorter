@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,14 +29,10 @@ public class App {
 
     private static List<File> getFilesToMove(String dir) {
         List<File> filesToMove = new ArrayList<>();
-        Optional<File[]> files = Optional.ofNullable(new File(dir).listFiles());
+        Optional<File[]> files = Optional.ofNullable(new File(dir).listFiles(File::isFile));
 
         files.ifPresent(filess -> {
-            for (File file : filess) {
-                if (file.isFile()) {
-                    filesToMove.add(file);
-                }
-            }
+            filesToMove.addAll(Arrays.asList(filess));
         });
         return filesToMove;
     }

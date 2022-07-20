@@ -17,23 +17,30 @@ public class App {
     private static final String BASE_DIR = "/home/gromozeqa/Downloads";
 
     public static void main(String[] args) {
+        System.out.println(transfer());
+    }
 
+    private static boolean transfer() {
         for (File file : getFilesToMove(BASE_DIR)) {
             if (getFileExtension(file.getName()).equals("jpg")) {
                 movePicture(file);
+                return true;
             }
+
             if (getFileExtension(file.getName()).equals("docx")) {
                 moveDocs(file);
+                return true;
             }
         }
+        return false;
     }
 
     private static List<File> getFilesToMove(String dir) {
         List<File> filesToMove = new ArrayList<>();
-        Optional<File[]> files = Optional.ofNullable(new File(dir).listFiles(File::isFile));
+        Optional<File[]> filesInFolder = Optional.ofNullable(new File(dir).listFiles(File::isFile));
 
-        files.ifPresent(filess -> {
-            filesToMove.addAll(Arrays.asList(filess));
+        filesInFolder.ifPresent(arrayOfFiles -> {
+            filesToMove.addAll(Arrays.asList(arrayOfFiles));
         });
         return filesToMove;
     }
@@ -44,7 +51,7 @@ public class App {
 
     private static boolean movePicture(File file) {
         try {
-            Path temp = Files.move(file.toPath(), Paths.get(String.format(PATH_FORMAT, "documents") + file.getName()));
+            Path temp = Files.move(file.toPath(), Paths.get(String.format(PATH_FORMAT, "pictures") + file.getName()));
             return true;
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -53,7 +60,7 @@ public class App {
 
     private static boolean moveDocs(File file) {
         try {
-            Path temp = Files.move(file.toPath(), Paths.get(String.format(PATH_FORMAT, "microsoft") + file.getName()));
+            Path temp = Files.move(file.toPath(), Paths.get(String.format(PATH_FORMAT, "documents") + file.getName()));
             return true;
         } catch (IOException e) {
             throw new RuntimeException(e);

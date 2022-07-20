@@ -14,9 +14,10 @@ import java.util.Optional;
 
 public class App {
     private static final String PATH_FORMAT = "/home/gromozeqa/Downloads/%s/";
+    private static final String BASE_DIR = "/home/gromozeqa/Downloads";
 
     public static void main(String[] args) {
-        final String BASE_DIR = "/home/gromozeqa/Downloads";
+
         for (File file : getFilesToMove(BASE_DIR)) {
             if (getFileExtension(file.getName()).equals("jpg")) {
                 movePicture(file);
@@ -43,7 +44,7 @@ public class App {
 
     private static boolean movePicture(File file) {
         try {
-            Path temp = Files.move(file.toPath(), Paths.get("/home/gromozeqa/Downloads/pictures/" + file.getName()));
+            Path temp = Files.move(file.toPath(), Paths.get(String.format(PATH_FORMAT, "documents") + file.getName()));
             return true;
         } catch (IOException e) {
             throw new RuntimeException(e);
